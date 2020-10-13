@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.sub:
             case R.id.point:
 
-                if(result.length()>1){
+                if(result.length()>=1){
                     judge = result.charAt(result.length()-1);
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
                         result = result.substring(0,result.length()-1);
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 my_result.setText(result);
                 break;
             case R.id.percent:
-                if(result.length()>1){
+                if(result.length()>=1){
                     judge = result.charAt(result.length()-1);
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
                         result = result.substring(0,result.length()-1);
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 is_result = true;
                 break;
             case R.id.square:
-                if(result.length()>1){
+                if(result.length()>=1){
                     judge = result.charAt(result.length()-1);
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
                         result = result.substring(0,result.length()-1);
@@ -176,9 +176,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         temp = i;
                     }
                 }
-                result = result.substring(temp,result.length()-1);
+
+                result = result.substring(temp,result.length());
                 result = String.valueOf(Math.sqrt(Double.parseDouble(result)));
                 my_result.setText(result);
+                break;
+            case R.id.sin:
+                if(result.length()>=1){
+                    judge = result.charAt(result.length()-1);
+                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                        result = result.substring(0,result.length()-1);
+                    }
+                }
+
+                //检查是否包含
+                temp = 0;
+                for(int i=0;i<result.length();i++){
+                    judge = result.charAt(i);
+                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                        temp = i;
+                    }
+                }
+                result = result.substring(temp,result.length());
+                result = String.valueOf(Math.sin(Math.toRadians(Double.parseDouble(result))));
+                my_result.setText(result);
+                break;
+            case R.id.cos:
+                if(result.length()>=1){
+                    judge = result.charAt(result.length()-1);
+                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                        result = result.substring(0,result.length()-1);
+                    }
+                }
+
+                //检查是否包含
+                temp = 0;
+                for(int i=0;i<result.length();i++){
+                    judge = result.charAt(i);
+                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                        temp = i;
+                    }
+                }
+                result = result.substring(temp,result.length());
+                result = String.valueOf(Math.cos(Math.toRadians(Double.parseDouble(result))));
+                my_result.setText(result);
+                break;
             case R.id.euqal:
                 result = cal_string(result);
                 my_result.setText(result);
