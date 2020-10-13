@@ -245,7 +245,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ans = "计算错误！";
         }
         return ans;
-
     }
 
 }
