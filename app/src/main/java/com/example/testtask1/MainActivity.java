@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //TODO 还是用数组存吧，这样一个循环就能够添加上点击事件
     public TextView ce,percent,change_sign,division,nine,eight,seven,six,five,four,three,two,one,plus,sub,multi,euqal,point,zero,square,sin,cos;
     public EditText my_result;
+    public int temp = 0;
     boolean is_result=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,17 +103,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.change_sign:
 
-                if(result.contains("-")){
-                    result = result.replace("-","");
-                    my_result.setText(result);
+                for(int i=0;i<result.length();i++){
+                    judge = result.charAt(i);
+                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                        temp = i;
+                    }
+                }
+                //非单独数字,给最后一个运算数更改符号
+                if(temp!=0){
+                    String want_to_chang = result.substring(temp+1,result.length());
+                    System.out.println(want_to_chang);
+                    if(want_to_chang.charAt(0)!='('){
+                        want_to_chang = "(-"+want_to_chang+")";
+                    }else{
+                        want_to_chang = want_to_chang.replace("(-","");
+                        want_to_chang = want_to_chang.replace(")","");
+                    }
+                    System.out.println(want_to_chang);
+                    my_result.setText(result.substring(0,temp+1)+want_to_chang);
+                    temp = 0;
                 }else{
-                    result = "-"+result;
-                    my_result.setText(result);
+                    //如果是单独的数字，那么检查是否包含负号
+                    if(result.contains("-")){
+                        my_result.setText(result.replace("-",""));
+                    }else {
+                        if(result!=""){
+                            if(result.equals("0") || result.equals("-0")){
+                                my_result.setText("0");
+                            }else {
+                                my_result.setText("-" + result);
+                            }
+                        }else {
+                            my_result.setText("0");
+                        }
+
+                    }
+
                 }
-                if(result.equals("0") || result.equals("-0")){
-                    result = "0";
-                    my_result.setText(result);
-                }
+
+
                 break;
             case R.id.division:
             case R.id.plus:
@@ -125,10 +154,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
                         result = result.substring(0,result.length()-1);
                     }
+                    result = result + ((TextView) v).getText();
+                    my_result.setText(result);
+                    is_result = false;
+                }else if(result.equals("")){
+                    result = "0.";
+                    my_result.setText(result);
+                    is_result = false;
                 }
-                result = result + ((TextView) v).getText();
-                my_result.setText(result);
-                is_result = false;
+
                 break;
             case R.id.nine:
             case R.id.eight:
@@ -155,10 +189,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
                         result = result.substring(0,result.length()-1);
                     }
+                    result = String.valueOf(Double.parseDouble(result) / 100);
+                    my_result.setText(result);
+                    is_result = true;
+                }else if(result.equals("")){
+                    result = "0";
+                    my_result.setText(result);
+                    is_result = false;
                 }
-                result = String.valueOf(Double.parseDouble(result) / 100);
-                my_result.setText(result);
-                is_result = true;
+
                 break;
             case R.id.square:
                 if(result.length()>=1){
@@ -166,20 +205,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
                         result = result.substring(0,result.length()-1);
                     }
-                }
-
-                //检查是否包含
-                int temp = 0;
-                for(int i=0;i<result.length();i++){
-                    judge = result.charAt(i);
-                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
-                        temp = i;
+                    //检查是否包含
+                    for(int i=0;i<result.length();i++){
+                        judge = result.charAt(i);
+                        if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                            temp = i;
+                        }
                     }
+
+                    result = result.substring(temp,result.length());
+                    System.out.println(result);
+                    if(Double.parseDouble(result)>0){
+                        result = String.valueOf(Math.sqrt(Double.parseDouble(result)));
+                        my_result.setText(result);
+                    }else{
+                        result = "错误";
+                        my_result.setText(result);
+                    }
+
+                }else if(result.equals("")){
+                    result = "错误";
+                    my_result.setText(result);
                 }
 
-                result = result.substring(temp,result.length());
-                result = String.valueOf(Math.sqrt(Double.parseDouble(result)));
-                my_result.setText(result);
+
                 break;
             case R.id.sin:
                 if(result.length()>=1){
@@ -187,19 +236,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
                         result = result.substring(0,result.length()-1);
                     }
+                    //检查是否包含
+                    temp = 0;
+                    for(int i=0;i<result.length();i++){
+                        judge = result.charAt(i);
+                        if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                            temp = i;
+                        }
+                    }
+                    result = result.substring(temp,result.length());
+                    result = String.valueOf(Math.sin(Math.toRadians(Double.parseDouble(result))));
+                    my_result.setText(result);
+                }else if(result.equals("")){
+                    result = "0";
+                    result = String.valueOf(Math.sin(Math.toRadians(Double.parseDouble(result))));
+                    my_result.setText(result);
                 }
 
-                //检查是否包含
-                temp = 0;
-                for(int i=0;i<result.length();i++){
-                    judge = result.charAt(i);
-                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
-                        temp = i;
-                    }
-                }
-                result = result.substring(temp,result.length());
-                result = String.valueOf(Math.sin(Math.toRadians(Double.parseDouble(result))));
-                my_result.setText(result);
+
                 break;
             case R.id.cos:
                 if(result.length()>=1){
@@ -207,23 +261,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
                         result = result.substring(0,result.length()-1);
                     }
+                    //检查是否包含
+                    temp = 0;
+                    for(int i=0;i<result.length();i++){
+                        judge = result.charAt(i);
+                        if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                            temp = i;
+                        }
+                    }
+                    result = result.substring(temp,result.length());
+                    result = String.valueOf(Math.cos(Math.toRadians(Double.parseDouble(result))));
+                    my_result.setText(result);
+                }else if(result.equals("")){
+                    result = "0";
+                    result = String.valueOf(Math.cos(Math.toRadians(Double.parseDouble(result))));
+                    my_result.setText(result);
                 }
 
-                //检查是否包含
-                temp = 0;
-                for(int i=0;i<result.length();i++){
-                    judge = result.charAt(i);
-                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
-                        temp = i;
-                    }
-                }
-                result = result.substring(temp,result.length());
-                result = String.valueOf(Math.cos(Math.toRadians(Double.parseDouble(result))));
-                my_result.setText(result);
+
                 break;
             case R.id.euqal:
-                result = cal_string(result);
-                my_result.setText(result);
+                if(result.equals("")){
+                    result = "0";
+                    my_result.setText(result);
+                }else{
+                    result = cal_string(result);
+                    my_result.setText(result);
+                }
+
                 break;
 
         }
