@@ -21,7 +21,7 @@
             android:hint="0"
             android:textSize="50sp"
             android:textColor="#FF9800"
-            android:focusable="false"
+            android:focusable="true"
             android:inputType="number"
             />
     </LinearLayout>

@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "MainActivity";
     //定义好需要获取到的元素
-    //TODO 还是用数组存吧，这样一个循环就能够添加上点击事件
     public TextView ce,percent,change_sign,division,nine,eight,seven,six,five,four,three,two,one,plus,sub,multi,euqal,point,zero,square,sin,cos;
     public EditText my_result;
     public int temp = 0;
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 my_result.setText(result);
                 break;
             case R.id.change_sign:
-
+                try{
                 for(int i=0;i<result.length();i++){
                     judge = result.charAt(i);
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
@@ -140,7 +139,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 }
-
+                }catch (Exception e){
+                    my_result.setText("计算错误！");
+                }
 
                 break;
             case R.id.division:
@@ -184,53 +185,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 my_result.setText(result);
                 break;
             case R.id.percent:
-                if(result.length()>=1){
-                    judge = result.charAt(result.length()-1);
-                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
-                        result = result.substring(0,result.length()-1);
+                try {
+                    if(result.length()>=1){
+                        judge = result.charAt(result.length()-1);
+                        if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                            result = result.substring(0,result.length()-1);
+                        }
+                        result = String.valueOf(Double.parseDouble(result) / 100);
+                        my_result.setText(result);
+                        is_result = true;
+                    }else if(result.equals("")){
+                        result = "0";
+                        my_result.setText(result);
+                        is_result = false;
                     }
-                    result = String.valueOf(Double.parseDouble(result) / 100);
-                    my_result.setText(result);
-                    is_result = true;
-                }else if(result.equals("")){
-                    result = "0";
-                    my_result.setText(result);
-                    is_result = false;
+                }catch (Exception e){
+                    my_result.setText("计算错误！");
                 }
+
 
                 break;
             case R.id.square:
-                if(result.length()>=1){
-                    judge = result.charAt(result.length()-1);
-                    if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
-                        result = result.substring(0,result.length()-1);
-                    }
-                    //检查是否包含
-                    for(int i=0;i<result.length();i++){
-                        judge = result.charAt(i);
-                        if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
-                            temp = i;
+                try{
+                        if(result.length()>=1){
+                            judge = result.charAt(result.length()-1);
+                            if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                                result = result.substring(0,result.length()-1);
+                            }
+                            //检查是否包含
+                            for(int i=0;i<result.length();i++){
+                                judge = result.charAt(i);
+                                if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
+                                    temp = i;
+                                }
+                            }
+
+                            result = result.substring(temp,result.length());
+                            System.out.println(result);
+                            if(Double.parseDouble(result)>0){
+                                result = String.valueOf(Math.sqrt(Double.parseDouble(result)));
+                                my_result.setText(result);
+                            }else{
+                                result = "错误";
+                                my_result.setText(result);
+                            }
+
+                        }else if(result.equals("")){
+                            result = "错误";
+                            my_result.setText(result);
                         }
-                    }
-
-                    result = result.substring(temp,result.length());
-                    System.out.println(result);
-                    if(Double.parseDouble(result)>0){
-                        result = String.valueOf(Math.sqrt(Double.parseDouble(result)));
-                        my_result.setText(result);
-                    }else{
-                        result = "错误";
-                        my_result.setText(result);
-                    }
-
-                }else if(result.equals("")){
-                    result = "错误";
-                    my_result.setText(result);
+                }catch (Exception e){
+                    my_result.setText("计算错误！");
                 }
 
 
                 break;
             case R.id.sin:
+            try{
                 if(result.length()>=1){
                     judge = result.charAt(result.length()-1);
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
@@ -252,10 +263,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     result = String.valueOf(Math.sin(Math.toRadians(Double.parseDouble(result))));
                     my_result.setText(result);
                 }
+            }catch (Exception e){
+                my_result.setText("计算错误！");
+            }
 
 
                 break;
             case R.id.cos:
+            try{
                 if(result.length()>=1){
                     judge = result.charAt(result.length()-1);
                     if(judge=='/' || judge=='X' || judge=='—' || judge=='+'){
@@ -277,7 +292,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     result = String.valueOf(Math.cos(Math.toRadians(Double.parseDouble(result))));
                     my_result.setText(result);
                 }
-
+            }catch (Exception e){
+                my_result.setText("计算错误！");
+            }
 
                 break;
             case R.id.euqal:
